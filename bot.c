@@ -374,7 +374,7 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
     bot_raw(bot, "PRIVMSG %s :prego\r\n", bot->chan);
   } 
   else if(strcasecmp(argv[0], "C") == 0 ) {
-    bot_raw(bot, "PRIVMSG %s :sono stato scritto in C per far contento Cabodi.\r\n", bot->chan);
+    bot_raw(bot, "PRIVMSG %s :sono stato scritto in C per far contento RMS.\r\n", bot->chan);
   } 
   else if(strcasecmp(argv[0], "contrib") == 0 ) {
     bot_raw(bot, "PRIVMSG %s :C-3PO fu scritto da smlb, b4d_tR1p e th3zer0, questo bot invece, fork di C-3PO ha visto come contributori CavalloBlu e KleinerMann.\r\n", bot->chan);
