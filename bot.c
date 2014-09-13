@@ -261,8 +261,12 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
       bot_raw(bot, "PRIVMSG %s :%s: http://www.reddit.com/r/random\r\n", bot->chan, user);
   }
   else if(strcasecmp(argv[0], "sqrt") == 0) {
+  	if(argv[1]!=NULL){
 		double x = atof(argv[1]);
 		bot_raw(bot,"PRIVMSG %s :%s: %g\r\n", bot->chan, user, sqrt(x));
+  	} else {
+		bot_raw(bot,"PRIVMSG %s :%s: you need to provide at least one argument!\r\n",bot->chan,user);
+		}
 	}
   else if(strcasecmp(argv[0], "sum") == 0) { 
     if((argv[1] != NULL)&&(argv[2] != NULL)) {
