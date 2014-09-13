@@ -262,8 +262,8 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
   }
   else if(strcasecmp(argv[0], "sqrt") == 0) {
   	if(argv[1]!=NULL){
-		double x = atof(argv[1]);
-		bot_raw(bot,"PRIVMSG %s :%s: %g\r\n", bot->chan, user, sqrt(x));
+		double i = atof(argv[1]);
+		bot_raw(bot,"PRIVMSG %s :%s: %g\r\n", bot->chan, user, sqrt(i));
   	} else {
 		bot_raw(bot,"PRIVMSG %s :%s: you need to provide at least one argument!\r\n",bot->chan,user);
 		}
@@ -378,7 +378,7 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
     bot_raw(bot, "PRIVMSG %s :dioladro.\r\n", bot->chan);
   } 
   else if(strcasecmp(argv[0], "grazie") == 0 ) {
-    bot_raw(bot, "PRIVMSG %s :prego\r\n", bot->chan);
+    bot_raw(bot, "PRIVMSG %s :prego %s\r\n", bot->chan, user);
   } 
   else if(strcasecmp(argv[0], "C") == 0 ) {
     bot_raw(bot, "PRIVMSG %s :sono stato scritto in C per far contento RMS.\r\n", bot->chan);
