@@ -4,5 +4,5 @@ C-3PO original bot
 	th3zer0
 
 R2-D2 fork
-	KleinerMann
-	CavalloBlu
+	Umby213 	aka	KleinerMann
+	Marco12393	aka	CavalloBlu
