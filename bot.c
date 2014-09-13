@@ -265,7 +265,7 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
 		bot_raw(bot,"PRIVMSG %s :%s: %g\r\n", bot->chan, user, sqrt(x));
 	}
   else if(strcasecmp(argv[0], "sum") == 0) { 
-    if(argv[2] != NULL) {
+    if((argv[1] != NULL)&&(argv[2] != NULL)) {
       double i = atof(argv[1]);
       double j = atof(argv[2]);
       bot_raw(bot, "PRIVMSG %s :%s: %g\r\n", bot->chan, user, i+j);
@@ -276,7 +276,7 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
 
   /* Aggiunta da CavalloBlu  */
   else if(strcasecmp(argv[0], "sub") == 0) { 
-    if(argv[2] != NULL) {
+    if((argv[1] != NULL)&&(argv[2] != NULL)) {
       double i = atof(argv[1]);
       double j = atof(argv[2]);
       bot_raw(bot, "PRIVMSG %s :%s: %g\r\n", bot->chan, user, i-j);
@@ -285,7 +285,7 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
     } 
   }
   else if(strcasecmp(argv[0],"div")==0) { 
-    if(argv[2]!=NULL){
+    if((argv[1] != NULL)&&(argv[2] != NULL)){
       double i=atof(argv[1]);
       double j=atof(argv[2]);
       bot_raw(bot, "PRIVMSG %s :%s: %g\r\n", bot->chan, user, i/j);
@@ -295,7 +295,7 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
 }
 
   else if(strcasecmp(argv[0],"mul")==0) { 
-    if(argv[2]!=NULL){
+    if((argv[1] != NULL)&&(argv[2] != NULL)){
       double i=atof(argv[1]);
       double j=atof(argv[2]);
       bot_raw(bot, "PRIVMSG %s :%s: %g\r\n", bot->chan, user, i*j);
@@ -305,14 +305,17 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
 }
 
   else if(strcasecmp(argv[0],"pow")==0) { 
-    if(argv[2]!=NULL){
+    if((argv[1] != NULL)&&(argv[2] != NULL)){
      double i=atof(argv[1]);
      double j=atof(argv[2]);
      bot_raw(bot, "PRIVMSG %s :%s: %g\r\n", bot->chan, user, pow(i,j));
     } else {
       bot_raw(bot, "PRIVMSG %s :%s: you need to provide at least two arguments!\r\n", bot->chan, user);
     }
-}
+} 
+  else if(strcasecmp(argv[0],"source")==0){
+  	bot_raw(bot, "PRIVMSG %s :%s: https://github.com/umby213/bot\r\n", bot->chan, user);
+  }
 /* Fine CavalloBlu  */
 
   else if((strcasecmp(argv[0], "archwiki") == 0) && argv[1] != NULL) {
@@ -409,6 +412,10 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
   }
   else if(strcasecmp(argv[0], "userlist") == 0) {
 		bot_raw(bot, "NAMES %s\r\n", bot->chan);
+  }
+  //if unknown command
+  else{
+  	bot_raw(bot, "PRIVMSG %s :%s: Invalid command motherfucker, try again.\r\n", bot->chan, user);
   }
 	return 0;
 }
