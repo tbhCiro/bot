@@ -494,7 +494,7 @@ void bot_msg(struct IRC *bot, const char *channel, const char *data){
 }
 void bot_help(struct IRC *bot, char* cmd){
 	if(cmd==NULL){
-		char h1[] = "!help !ping !quit !google !ddg !reddit !sqrt !archwiki !whoami !attack !lookup !away !life !rms !random !privacy !segfault !future !sum !sub !div !pow !C !thanks <3";
+		char h1[] = "!help !ping !quit !google !ddg !reddit !archwiki !whoami !attack !lookup !away !life !rms !random !privacy !segfault !future !sum !sub !div !pow !sqrt !C !grazie !source <3";
 		bot_raw(bot,"PRIVMSG %s :%s\r\n", bot->chan, h1);
 		char h2[] = "Type !help <cmd> for information about that command.";
 		bot_raw(bot,"PRIVMSG %s :%s\r\n", bot->chan, h2);
@@ -586,6 +586,14 @@ void bot_help(struct IRC *bot, char* cmd){
 		else if(strcasecmp(cmd, "segfault") == 0){
 			char h1[] = "Pfff. I'm not a liar.";
 			bot_raw(bot,"PRIVMSG %s :%s\r\n", bot->chan, h1);
+		}
+		else if(strcasecmp(cmd, "source") == 0){
+			char h1[] = "Visualizza la pagina contenente il codice di TrinciaPollo.";
+			bot_raw(bot,"PRIVMSG %s :%s\r\n", bot->chan, h1);
+		}
+		else{
+			char h1[]="Non esiste alcun comando simile.";
+			bot_raw(bot,"PRIVMSG %s :%s\r\n", bot->chan,h1);
 		}
 	}
 }
