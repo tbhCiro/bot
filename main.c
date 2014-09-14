@@ -20,9 +20,10 @@ int save_config(char *filename, char *s, char *p, char *n, char *c);
 struct IRC bot;
 
 int main(int argc, char *argv[]){
-	char version[10];
-	sprintf(version,"%d.%d.%d", version_major, version_minor, version_patch);
-	printf("C-3PO - %s\n  This software is under the GPL License\n", version);
+	char version[19];
+	/* sprintf(version,"%d.%d.%d", version_major, version_minor, version_patch); */
+	strcpy(version,"development version");
+	printf("irc-bot - %s\n  This software is under the GPL License\n", version);
 	
 	// 5 argument - start the bot
 	if(argc == 5){

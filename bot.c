@@ -122,7 +122,7 @@ int bot_connect(struct IRC *bot){
 						// From RFC: JOIN <channel> [key]  
 						// Maybe we can support password protected channel (?)
 						bot_raw(bot,"JOIN %s\r\n", bot->chan);
-						bot_raw(bot,"PRIVMSG %s :Hello world!\r\n", bot->chan);
+						bot_raw(bot,"PRIVMSG %s :Ciao a tutti i presenti da %s!\r\n", bot->chan, bot->nick);
 					} else if (!strncmp(command, "PRIVMSG", 7) || !strncmp(command, "NOTICE", 6)) {
 						if (where == NULL || message == NULL) continue;
 						if ((sep = strchr(user, '!')) != NULL) user[sep - user] = '\0';
@@ -153,13 +153,13 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
 	
 	if(strstr(msg,"<3") || strstr(msg,"love")){
 		bot_raw(bot,"PRIVMSG %s :%s: so much LOVE\r\n", bot->chan, user);
-		sleep(2);
-    bot_action(bot,bot->chan,"feeling lovely");
+	/*	sleep(2);
+    bot_action(bot,bot->chan,"feeling lovely");*/
 	}
 	if(strstr(msg,"fuck")){
 		bot_raw(bot,"PRIVMSG %s :%s: don't say bad words!\r\n", bot->chan, user);
 		sleep(2);
-    bot_action(bot,bot->chan,"is angry");
+    bot_action(bot,bot->chan,"is angry!");
 	}
 	
 	

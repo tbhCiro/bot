@@ -32,10 +32,10 @@ OBJDIR = bin
 
 # Compile the executable
 ## $^ is the parameter to the right of :
-c-3po: $(OBJ)
-	$(CC) $(BINOBJ) -o bin/c-3po $(CFLAGS)
+PoLiBoT: $(OBJ)
+	$(CC) $(BINOBJ) -o bin/PoLiBoT $(CFLAGS)
 
-all: c-3po
+all: PoLiBoT
 
 # Delete compiled file
 clean:
