@@ -339,9 +339,9 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
     if(argv[1]!=NULL&&argv[2]!=NULL&&argv[3]!=NULL){
     float a,b,c;
     float x1,x2,delta;
-    a=argv[1];
-    b=argv[2];
-    c=argv[3];
+    a=atof(argv[1]);
+    b=atof(argv[2]);
+    c=atof(argv[3]);
     delta=b*b - 4*a*c;
     if(a==0)
     {
