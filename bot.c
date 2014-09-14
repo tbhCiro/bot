@@ -349,11 +349,11 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
         {
             x1=-c/b;
             x2=0;
-            bot_raw(bot, "PRIVMSG %s :%s: x1: %f x2: %f", bot->chan, user,x1,x2);
+            bot_raw(bot, "PRIVMSG %s :%s: x1: %f x2: %f\r\n", bot->chan, user,x1,x2);
         }
         else
         {
-            bot_raw(bot, "PRIVMSG %s :%s:L'equazione non contiene variabili.", bot->chan, user);
+            bot_raw(bot, "PRIVMSG %s :%s:L'equazione non contiene variabili.\r\n", bot->chan, user);
         }
     }
     else
@@ -362,17 +362,17 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
         {
             x1=(-b+sqrt(delta))/(2*a);
             x2=(-b-sqrt(delta))/(2*a);
-            bot_raw(bot, "PRIVMSG %s :%s: x1: %f x2: %f", bot->chan, user,x1,x2);
+            bot_raw(bot, "PRIVMSG %s :%s: x1: %f x2: %f\r\n", bot->chan, user,x1,x2);
         }
         else
         {
-            bot_raw(bot, "PRIVMSG %s :%s:L'equazione non ammette soluzioni reali.", bot->chan, user);
+            bot_raw(bot, "PRIVMSG %s :%s:L'equazione non ammette soluzioni reali.\r\n", bot->chan, user);
         }
 
     }
     }
   	else{
-  		bot_raw(bot, "PRIVMSG %s :%s: Parametri insufficienti.", bot->chan, user);
+  		bot_raw(bot, "PRIVMSG %s :%s: Parametri insufficienti.\r\n", bot->chan, user);
   	}
   }
   
@@ -575,7 +575,7 @@ void bot_msg(struct IRC *bot, const char *channel, const char *data){
 }
 void bot_help(struct IRC *bot, char* cmd){
 	if(cmd==NULL){
-		char h1[] = "!help !ping !quit !google !ddg !reddit !archwiki !whoami !attack !lookup !away !life !rms !random !privacy !segfault !future !sum !sub !div !pow !sqrt !C !grazie !source <3";
+		char h1[] = "!help !ping !quit !google !ddg !reddit !archwiki !whoami !attack !lookup !away !life !rms !random !privacy !segfault !future !sum !sub !div !pow !sqrt !eq !C !grazie !source <3";
 		bot_raw(bot,"PRIVMSG %s :%s\r\n", bot->chan, h1);
 		char h2[] = "Type !help <cmd> for information about that command.";
 		bot_raw(bot,"PRIVMSG %s :%s\r\n", bot->chan, h2);
@@ -671,6 +671,10 @@ void bot_help(struct IRC *bot, char* cmd){
 		else if(strcasecmp(cmd, "source") == 0){
 			char h1[] = "Visualizza la pagina contenente il codice di .";
 			bot_raw(bot,"PRIVMSG %s :%s%s\r\n", bot->chan, h1, bot->nick);
+		}
+		else if(strcasecmp(cmd, "eq") == 0){
+			char h1[] = "Risolve un'equazione di secondo grado. Richiede tre parametri.";
+			bot_raw(bot,"PRIVMSG %s :%s\r\n", bot->chan, h1);
 		}
 		else{
 			char h1[]="Non esiste alcun comando simile.";
