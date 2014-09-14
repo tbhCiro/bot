@@ -349,11 +349,11 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
         {
             x1=-c/b;
             x2=0;
-            bot_raw(bot, "PRIVMSG %s :%s: x1: %f x2: %f\r\n", bot->chan, user,x1,x2);
+            bot_raw(bot, "PRIVMSG %s :%s: x1: %.2f x2: %.2f\r\n", bot->chan, user,x1,x2);
         }
         else
         {
-            bot_raw(bot, "PRIVMSG %s :%s:L'equazione non contiene variabili.\r\n", bot->chan, user);
+            bot_raw(bot, "PRIVMSG %s :%s: L'equazione non contiene variabili.\r\n", bot->chan, user);
         }
     }
     else
@@ -362,11 +362,11 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
         {
             x1=(-b+sqrt(delta))/(2*a);
             x2=(-b-sqrt(delta))/(2*a);
-            bot_raw(bot, "PRIVMSG %s :%s: x1: %f x2: %f\r\n", bot->chan, user,x1,x2);
+            bot_raw(bot, "PRIVMSG %s :%s: x1: %.2f x2: %.2f\r\n", bot->chan, user,x1,x2);
         }
         else
         {
-            bot_raw(bot, "PRIVMSG %s :%s:L'equazione non ammette soluzioni reali.\r\n", bot->chan, user);
+            bot_raw(bot, "PRIVMSG %s :%s: L'equazione non ammette soluzioni reali.\r\n", bot->chan, user);
         }
 
     }
@@ -669,7 +669,7 @@ void bot_help(struct IRC *bot, char* cmd){
 			bot_raw(bot,"PRIVMSG %s :%s\r\n", bot->chan, h1);
 		}
 		else if(strcasecmp(cmd, "source") == 0){
-			char h1[] = "Visualizza la pagina contenente il codice di .";
+			char h1[] = "Visualizza la pagina contenente il codice di ";
 			bot_raw(bot,"PRIVMSG %s :%s%s\r\n", bot->chan, h1, bot->nick);
 		}
 		else if(strcasecmp(cmd, "eq") == 0){
