@@ -254,12 +254,12 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
 			bot_raw(bot,"PRIVMSG %s :%s: https://lmddgtfy.net/?q=%s\r\n", bot->chan, user, argv[1]);	
 		}
 	}
-  else if(strcasecmp(argv[0], "reddit") == 0) {
-    if(argv[1] != NULL) 
-      bot_raw(bot, "PRIVMSG %s :http://www.reddit.com/search?q=%s\r\n", bot->chan, argv[1]);
-    else
-      bot_raw(bot, "PRIVMSG %s :%s: http://www.reddit.com/r/random\r\n", bot->chan, user);
-  }
+	else if(strcasecmp(argv[0], "reddit") == 0) {
+		if(argv[1] != NULL) 
+			bot_raw(bot, "PRIVMSG %s :http://www.reddit.com/search?q=%s\r\n", bot->chan, argv[1]);
+	else
+		bot_raw(bot, "PRIVMSG %s :%s: http://www.reddit.com/r/random\r\n", bot->chan, user);
+	}
   else if(strcasecmp(argv[0], "sqrt") == 0) {
   	if(argv[1]!=NULL){
 		double i = atof(argv[1]);
@@ -392,7 +392,31 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
     } else {
       bot_raw(bot, "PRIVMSG %s :%s: https://eff.org | https://prism-break.org | https://torproject.org | http://stallman.org\r\n", bot->chan, user);
     }
-  }
+  } 
+	else if(strcasecmp(argv[0], "wat") == 0 ) {
+		if(argv[1] != NULL) {
+			bot_raw(bot, "PRIVMSG %s :%s: http://goo.gl/T9SSRy\r\n", bot->chan, argv[1]);
+		} else {
+			bot_raw(bot, "PRIVMSG %s :%s: http://goo.gl/T9SSRy\r\n", bot->chan, user);
+		}
+	}
+
+	else if(strcasecmp(argv[0], "wtf") == 0 ) {
+		if(argv[1] != NULL) {
+			bot_raw(bot, "PRIVMSG %s :%s: http://goo.gl/sAkn7z\r\n", bot->chan, argv[1]);
+		} else {
+			bot_raw(bot, "PRIVMSG %s :%s: http://goo.gl/sAkn7z\r\n", bot->chan, user);
+		}
+	} 
+
+	else if(strcasecmp(argv[0], "hate") == 0 ) {
+		if(argv[1] != NULL) {
+			bot_raw(bot, "PRIVMSG %s :%s: http://goo.gl/fHVO8s\r\n", bot->chan, argv[1]);
+		} else {
+			bot_raw(bot, "PRIVMSG %s :%s: http://goo.gl/fHVO8s\r\n", bot->chan, user);
+		}
+	} 
+
   else if(strcasecmp(argv[0], "segfault") == 0) {
     bot_raw(bot, "PRIVMSG %s :TrinciaPollo never segfault...and never lie.\r\n", bot->chan);
   }
