@@ -146,6 +146,7 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
 //	[from: Th3Zer0] [reply-with: PRIVMSG] [where: C-3PO_bot] [reply-to: Th3Zer0] ciao
 // Channel message example
 //	[from: Th3Zer0] [reply-with: PRIVMSG] [where: ##freedomfighter] [reply-to: ##freedomfighter] ciao
+	
 	if(DEBUG){
 		printf("[from: %s] [reply-with: %s] [where: %s] [reply-to: %s] \"%s\"", user, command, where, target, msg);
 	}
@@ -160,9 +161,17 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
 		sleep(2);
     bot_action(bot,bot->chan,"is angry");
 	}
-	if(strstr(msg,"TrinciaPollo: how are you?")) {
+	
+	
+	char *h1=malloc(strlen(bot->nick)+14);
+	strcpy(h1,bot->nick);
+	strcat(h1,": how are you?");
+	if(strstr(msg,h1)) {
     bot_raw(bot, "PRIVMSG %s :%s: not bad and you?\r\n", bot->chan, user);
   }
+  free(h1);
+  h1=NULL;
+  
 	if(strcasecmp(user,"NickServ")==0){
 		if(strstr(msg,"Last seen")){
 			bot_raw(bot, "PRIVMSG %s :%s\r\n", bot->chan, msg);
@@ -318,8 +327,56 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
     }
 } 
   else if(strcasecmp(argv[0],"source")==0){
-  	bot_raw(bot, "PRIVMSG %s :%s: https://github.com/umby213/bot\r\n", bot->chan, user);
+  	if(argv[1]!=NULL){
+  	bot_raw(bot, "PRIVMSG %s :%s: https://github.com/umby213/bot\r\n", bot->chan, argv[1]);
   }
+  	else{
+  		bot_raw(bot, "PRIVMSG %s :%s: https://github.com/umby213/bot\r\n", bot->chan, user);
+  	}
+  }
+  
+  else if(strcasecmp(argv[0],"eq")==0){
+    if(argv[1]!=NULL&&argv[2]!=NULL&&argv[3]!=NULL){
+    float a,b,c;
+    float x1,x2,delta;
+    a=argv[1];
+    b=argv[2];
+    c=argv[3];
+    delta=b*b - 4*a*c;
+    if(a==0)
+    {
+        if(b!=0)
+        {
+            x1=-c/b;
+            x2=0;
+            bot_raw(bot, "PRIVMSG %s :%s: x1: %f x2: %f", bot->chan, user,x1,x2);
+        }
+        else
+        {
+            bot_raw(bot, "PRIVMSG %s :%s:L'equazione non contiene variabili.", bot->chan, user);
+        }
+    }
+    else
+    {
+        if(delta>=0)
+        {
+            x1=(-b+sqrt(delta))/(2*a);
+            x2=(-b-sqrt(delta))/(2*a);
+            bot_raw(bot, "PRIVMSG %s :%s: x1: %f x2: %f", bot->chan, user,x1,x2);
+        }
+        else
+        {
+            bot_raw(bot, "PRIVMSG %s :%s:L'equazione non ammette soluzioni reali.", bot->chan, user);
+        }
+
+    }
+    }
+  	else{
+  		bot_raw(bot, "PRIVMSG %s :%s: Parametri insufficienti.", bot->chan, user);
+  	}
+  }
+  
+  
 /* Fine CavalloBlu  */
 
   else if((strcasecmp(argv[0], "archwiki") == 0) && argv[1] != NULL) {
@@ -498,11 +555,11 @@ void bot_nick(struct IRC *bot, const char *data){
 }
 // bot_away: For quitting IRC
 void bot_away(struct IRC *bot){
-	bot_raw(bot,"AWAY :TrinciaPollo Bot\r\n");
+	bot_raw(bot,"AWAY :%s Bot\r\n",bot->nick);
 }
 // bot_quit: For quitting IRC
 void bot_quit(struct IRC *bot){
-	bot_raw(bot,"QUIT :TrinciaPollo Bot\r\n");
+	bot_raw(bot,"QUIT :%s Bot\r\n",bot->nick);
 }
 // bot_topic: For setting or removing a topic
 void bot_topic(struct IRC *bot, const char *channel, const char *data){
@@ -612,8 +669,8 @@ void bot_help(struct IRC *bot, char* cmd){
 			bot_raw(bot,"PRIVMSG %s :%s\r\n", bot->chan, h1);
 		}
 		else if(strcasecmp(cmd, "source") == 0){
-			char h1[] = "Visualizza la pagina contenente il codice di TrinciaPollo.";
-			bot_raw(bot,"PRIVMSG %s :%s\r\n", bot->chan, h1);
+			char h1[] = "Visualizza la pagina contenente il codice di .";
+			bot_raw(bot,"PRIVMSG %s :%s%s\r\n", bot->chan, h1, bot->nick);
 		}
 		else{
 			char h1[]="Non esiste alcun comando simile.";
