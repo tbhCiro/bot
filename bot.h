@@ -62,6 +62,7 @@ void bot_topic(struct IRC *bot, const char *channel, const char *data);
 void bot_action(struct IRC *bot, const char *channel, const char *data);
 void bot_msg(struct IRC *bot, const char *channel, const char *data);
 void bot_help(struct IRC *bot, char* cmd);
+void bot_portal(struct IRC *bot, char* cmd/*, char *user*/);
 
 // built-in error reporting
 void c_error(FILE *out, const char *fmt, ...);

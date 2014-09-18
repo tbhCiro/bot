@@ -122,7 +122,7 @@ int bot_connect(struct IRC *bot){
 						// From RFC: JOIN <channel> [key]  
 						// Maybe we can support password protected channel (?)
 						bot_raw(bot,"JOIN %s\r\n", bot->chan);
-						bot_raw(bot,"PRIVMSG %s :Ciao a tutti i presenti da %s!\r\n", bot->chan, bot->nick);
+						bot_raw(bot,"PRIVMSG %s :Ciao a tutti da %s!\r\n", bot->chan, bot->nick);
 					} else if (!strncmp(command, "PRIVMSG", 7) || !strncmp(command, "NOTICE", 6)) {
 						if (where == NULL || message == NULL) continue;
 						if ((sep = strchr(user, '!')) != NULL) user[sep - user] = '\0';
@@ -223,6 +223,9 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
 	}
 	else if(strcasecmp(argv[0], "help") == 0){
 		bot_help(bot,argv[1]);
+	}
+	else if(strcasecmp(argv[0], "portale") == 0){
+		bot_portal(bot,argv[1]);
 	}
 	else if(strcasecmp(argv[0], "count") == 0){
 		bot_raw(bot,"PRIVMSG %s :%d\r\n", bot->chan, i);
@@ -435,13 +438,17 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
     bot_raw(bot, "PRIVMSG %s :dioladro.\r\n", bot->chan);
   } 
   else if(strcasecmp(argv[0], "grazie") == 0 ) {
-    bot_raw(bot, "PRIVMSG %s :prego %s\r\n", bot->chan, user);
+    bot_raw(bot, "PRIVMSG %s :prego %s!\r\n", bot->chan, user);
   } 
   else if(strcasecmp(argv[0], "C") == 0 ) {
     bot_raw(bot, "PRIVMSG %s :sono stato scritto in C per far contento RMS.\r\n", bot->chan);
   } 
   else if(strcasecmp(argv[0], "contrib") == 0 ) {
-    bot_raw(bot, "PRIVMSG %s :C-3PO fu scritto da smlb, b4d_tR1p e th3zer0, questo bot invece, fork di C-3PO ha visto come contributori CavalloBlu e KleinerMann.\r\n", bot->chan);
+	  if (argv[1] != NULL){
+	    bot_raw(bot, "PRIVMSG %s :%s: https://raw.githubusercontent.com/umby213/bot/master/contributors.txt\r\n", bot->chan, argv[1]);
+	  }else{	
+	    bot_raw(bot, "PRIVMSG %s :https://raw.githubusercontent.com/umby213/bot/master/contributors.txt\r\n", bot->chan);
+	  }
   } 
   else if(strcasecmp(argv[0], "privacy") == 0 ) {
     if(argv[1] != NULL) {
@@ -575,7 +582,7 @@ void bot_msg(struct IRC *bot, const char *channel, const char *data){
 }
 void bot_help(struct IRC *bot, char* cmd){
 	if(cmd==NULL){
-		char h1[] = "!help !ping !quit !google !ddg !reddit !archwiki !whoami !attack !lookup !away !life !rms !random !privacy !segfault !future !sum !sub !div !pow !sqrt !eq !C !grazie !source <3";
+		char h1[] = "!help !ping !quit !google !ddg !reddit !archwiki !whoami !attack !lookup !away !life !rms !random !privacy !segfault !future !sum !sub !div !pow !sqrt !eq !C !grazie !source !portale <3";
 		bot_raw(bot,"PRIVMSG %s :%s\r\n", bot->chan, h1);
 		char h2[] = "Type !help <cmd> for information about that command.";
 		bot_raw(bot,"PRIVMSG %s :%s\r\n", bot->chan, h2);
@@ -588,10 +595,10 @@ void bot_help(struct IRC *bot, char* cmd){
 			char h1[] = "Quit the bot";
 			bot_raw(bot,"PRIVMSG %s :%s\r\n", bot->chan, h1);
 		}
-    else if(strcasecmp(cmd, "reddit") == 0){
-      char h1[] = "Print the link of a reddit search. Take <keyword> as argument";
-      bot_raw(bot, "PRIVMSG %s :%s\r\n", bot->chan, h1);
-    }
+		else if(strcasecmp(cmd, "reddit") == 0){
+		        char h1[] = "Print the link of a reddit search. Take <keyword> as argument";
+		        bot_raw(bot, "PRIVMSG %s :%s\r\n", bot->chan, h1);
+    		}
 		else if(strcasecmp(cmd, "google") == 0){
 			char h1[] = "Print the link of a google search. Take <keyword> as argument";
 			bot_raw(bot,"PRIVMSG %s :%s\r\n", bot->chan, h1);
@@ -617,8 +624,8 @@ void bot_help(struct IRC *bot, char* cmd){
 			bot_raw(bot,"PRIVMSG %s :%s\r\n", bot->chan, h1);
 		}
 		else if(strcasecmp(cmd, "future") == 0){
-		    char h1[] = "the future we would like to.";
-		    bot_raw(bot,"PRIVMSG %s :%s\r\n", bot->chan, h1);
+			char h1[] = "the future we would like to.";
+			bot_raw(bot,"PRIVMSG %s :%s\r\n", bot->chan, h1);
 		}
 		else if(strcasecmp(cmd, "lookup") == 0){
 			char h1[] = "Perform a DNS Lookup. Take <hostname> as argument";
@@ -676,9 +683,34 @@ void bot_help(struct IRC *bot, char* cmd){
 			char h1[] = "Risolve un'equazione di secondo grado. Richiede tre parametri.";
 			bot_raw(bot,"PRIVMSG %s :%s\r\n", bot->chan, h1);
 		}
+		else if(strcasecmp(cmd, "portale") == 0){
+			char h1[] = "Visualizza link alle principali sezioni del portale";
+			bot_raw(bot, "PRIVMSG %s :%s\r\n", bot->chan, h1);
+		}
 		else{
 			char h1[]="Non esiste alcun comando simile.";
 			bot_raw(bot,"PRIVMSG %s :%s\r\n", bot->chan,h1);
 		}
 	}
-}
+} // void bot_help end
+
+void bot_portal(struct IRC *bot, char* cmd/*, char *user*/){
+	if(cmd==NULL){
+		char h1[] = "didattica, login";
+		bot_raw(bot,"PRIVMSG %s :%s\r\n", bot->chan, h1);
+	/*	char h2[] = "Type !help <cmd> for information about that command.";
+		bot_raw(bot,"PRIVMSG %s :%s\r\n", bot->chan, h2);*/
+	} else {
+		if(strcasecmp(cmd, "didattica") == 0){
+			char h1[] = "https://didattica.polito.it/";
+			bot_raw(bot,"PRIVMSG %s :%s\r\n", bot->chan, h1);
+		}
+		else if(strcasecmp(cmd, "login") == 0){
+			char h1[] = "https://login.didattica.polito.it/secure-studenti/ShibLogin.php";
+			bot_raw(bot,"PRIVMSG %s :%s\r\n", bot->chan, h1);
+		}
+	} // else of if(cmd==null) end;
+
+
+} //void bot_portal end
+		
