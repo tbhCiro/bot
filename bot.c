@@ -146,7 +146,7 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
 //	[from: Th3Zer0] [reply-with: PRIVMSG] [where: C-3PO_bot] [reply-to: Th3Zer0] ciao
 // Channel message example
 //	[from: Th3Zer0] [reply-with: PRIVMSG] [where: ##freedomfighter] [reply-to: ##freedomfighter] ciao
-	
+		
 	if(DEBUG){
 		printf("[from: %s] [reply-with: %s] [where: %s] [reply-to: %s] \"%s\"", user, command, where, target, msg);
 	}
@@ -158,8 +158,8 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
 	}
 	if(strstr(msg,"fuck")){
 		bot_raw(bot,"PRIVMSG %s :%s: don't say bad words!\r\n", target, user);
-		sleep(2);
-    bot_action(bot,target,"is angry!");
+	/*	sleep(2);
+    bot_action(bot,target,"is angry!"); */
 	}
 	
 	
@@ -508,11 +508,15 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
 		}
   }
   else if(strcasecmp(argv[0], "userlist") == 0) {
+	  if (strcasecmp(target,bot->chan) != 0){
+	  	bot_raw(bot, "PRIVMSG %s :!userlist non può essere usato in query.\r\n", target);
+	  }else{
 		bot_raw(bot, "NAMES %s\r\n", target);
+	  }
   }
   //if unknown command
   else{
-  	bot_raw(bot, "PRIVMSG %s :%s: Invalid command motherfucker, try again.\r\n", target, user);
+  	bot_raw(bot, "PRIVMSG %s :%s: Comando non valido, dai un !help.\r\n", target, user);
   }
 	return 0;
 }
