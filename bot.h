@@ -26,7 +26,9 @@
 #define version_minor 1
 #define version_patch 5
 // 0 stand for false
-#define DEBUG 0
+#define DEBUG 1
+
+#define REJOIN 1 /* 0 -> no rejoin after kick; 1 -> rejoin after kick */
 
 #define NICKNAME_LIMIT 20
 

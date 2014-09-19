@@ -16,10 +16,10 @@ FATTO:
 * doppio argomento a !away: !away <user>
 * vari link al portale polito.it
 * supporto alla query
-
+* Auto re-join when kicked
 
 todo from c-3po code:
-* Auto re-join when kicked
+* Auto re-join when kicked 	DONE
 * Check the internet connection and join when avviable (now segfault)
 * Alert when an user flood after 5 messages
 * Kick an user that flood 10 messagses

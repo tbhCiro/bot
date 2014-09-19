@@ -115,7 +115,12 @@ int bot_connect(struct IRC *bot){
 							break;
 						}
 					}
-					
+					/* Rejoin after kick */
+					if((strcasecmp(command, "KICK") == 0) && (REJOIN) ){
+						sleep(3);
+						bot_raw(bot,"JOIN %s\n\r", bot->chan);
+					}
+				
 					if (wordcount < 2) continue;
 					
 					if (!strncmp(command, "001", 3) && bot->chan != NULL) {
@@ -146,7 +151,9 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
 //	[from: Th3Zer0] [reply-with: PRIVMSG] [where: C-3PO_bot] [reply-to: Th3Zer0] ciao
 // Channel message example
 //	[from: Th3Zer0] [reply-with: PRIVMSG] [where: ##freedomfighter] [reply-to: ##freedomfighter] ciao
-		
+	
+
+
 	if(DEBUG){
 		printf("[from: %s] [reply-with: %s] [where: %s] [reply-to: %s] \"%s\"", user, command, where, target, msg);
 	}
