@@ -20,15 +20,15 @@ in bot.h
 
 Per compilare semplicemente usare make in un terminale:
 
-$ ~make `
+$ make 
 
 ## Avviare il bot
-Sintassi: ./PoLiBoT <server> <port> <nick> <chan>
+Sintassi: ./PoLiBoT '<server> <port> <nick> <chan>'
 
 Usare gli escape prima di '#'.
 
 Esempio:
-$ `./PoLiBoT irc.freenode.org 6667 bellissimobot \#\#canaleinventato `
+$ ./PoLiBoT irc.freenode.org 6667 bellissimobot \#\#canaleinventato 
 
 ## Contibutori
 See contributors.txt file
