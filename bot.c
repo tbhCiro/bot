@@ -142,9 +142,7 @@ int bot_connect(struct IRC *bot){
 					}
 					/* Saluta i nuovi arrivati */
 					if((strcasecmp(command, "JOIN") == 0) && (HELLO) ){
-						if ((strcasecmp(user, bot->nick)) != 0){ 
-							bot_raw(bot,"PRIVMSG %s :Ciao %s!\n\r", bot->chan, user);
-						}
+						/* implementare */
 					} 
 
 
@@ -170,25 +168,24 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
 	}
 
 	if(strstr(msg,"<3") || strstr(msg,"love")){
-		bot_raw(bot,"PRIVMSG %s :%s: so much LOVE\r\n", /*bot->chan*/target, user);
+		bot_raw(bot,"PRIVMSG %s :%s: so much LOVE\r\n", target, user);
 	/*	sleep(2);
-    bot_action(bot,target,"feeling lovely");*/
+   		bot_action(bot,target,"feeling lovely");*/
 	}
 	if(strstr(msg,"fuck")){
 		bot_raw(bot,"PRIVMSG %s :%s: don't say bad words!\r\n", target, user);
 	/*	sleep(2);
-    bot_action(bot,target,"is angry!"); */
+    		bot_action(bot,target,"is angry!"); */
 	}
-	
 	
 	char *h1=malloc(strlen(bot->nick)+14);
 	strcpy(h1,bot->nick);
-	strcat(h1,": how are you?");
+	strcat(h1,": come stai?");
 	if(strstr(msg,h1)) {
-    bot_raw(bot, "PRIVMSG %s :%s: not bad and you?\r\n", target, user);
-  }
-  free(h1);
-  h1=NULL;
+    		bot_raw(bot, "PRIVMSG %s :%s: non male grazie, tu?\r\n", target, user);
+  	}
+	free(h1);
+	h1=NULL;
   
 	if(strcasecmp(user,"NickServ")==0){
 		if(strstr(msg,"Last seen")){
@@ -203,8 +200,8 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
 				bot_raw(bot, "PRIVMSG %s :%s\r\n", target, title);
 			}
 		}
-  }
-  if((msg[0] == '#') && (msg[1]=='!')) {
+  	}
+	if((msg[0] == '#') && (msg[1]=='!')) {
 		bot_raw(bot, "PRIVMSG %s :Shebang!\r\n", target);
 	}
 	
