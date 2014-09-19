@@ -115,12 +115,7 @@ int bot_connect(struct IRC *bot){
 							break;
 						}
 					}
-					/* Rejoin after kick */
-					if((strcasecmp(command, "KICK") == 0) && (REJOIN) ){
-						sleep(3);
-						bot_raw(bot,"JOIN %s\n\r", bot->chan);
-					}
-				
+			
 					if (wordcount < 2) continue;
 					
 					if (!strncmp(command, "001", 3) && bot->chan != NULL) {
@@ -139,6 +134,22 @@ int bot_connect(struct IRC *bot){
 						message = strtok(message, "\n\r");
 						bot_parse_service(bot, user, command, where, target, message);
 					}
+					/* Rejoin after kick */
+					if((strcasecmp(command, "KICK") == 0) && (REJOIN) ){
+						sleep(3);
+						bot_raw(bot,"JOIN %s\n\r", bot->chan);
+						continue;
+					}
+					/* Saluta i nuovi arrivati */
+					if((strcasecmp(command, "JOIN") == 0) && (HELLO) ){
+						if ((strcasecmp(user, bot->nick)) != 0){ 
+							bot_raw(bot,"PRIVMSG %s :Ciao %s!\n\r", bot->chan, user);
+						}
+					} 
+
+
+
+
 				}
 			}
 		} 

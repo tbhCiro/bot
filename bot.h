@@ -29,6 +29,7 @@
 #define DEBUG 1
 
 #define REJOIN 1 /* 0 -> no rejoin after kick; 1 -> rejoin after kick */
+#define HELLO  1 /* 0 -> non saluta i nuovi entrati, 1 -> saluta i nuovi entrati */
 
 #define NICKNAME_LIMIT 20
 
