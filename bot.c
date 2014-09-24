@@ -196,9 +196,7 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
 			bot_raw(bot, "PRIVMSG %s :%s\r\n", target, msg);
 		}
 	}
-	if(strstr(msg,"http://")) {
-		msg = strtok(msg, "\n\r");
-		
+	
 		
 	if(strstr(msg,"http://")) {
 		msg = strtok(msg, "\n\r");
