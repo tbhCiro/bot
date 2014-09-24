@@ -1,3 +1,5 @@
+#define N 43
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -166,17 +168,19 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
 	if(DEBUG){
 		printf("[from: %s] [reply-with: %s] [where: %s] [reply-to: %s] \"%s\"", user, command, where, target, msg);
 	}
-
-	if(strstr(msg,"<3") || strstr(msg,"love")){
+	
+	
+	//comandi senza "!"
+	if(strstr(msg,"<3") || strstr(msg,"love"))
 		bot_raw(bot,"PRIVMSG %s :%s: so much LOVE\r\n", target, user);
-	/*	sleep(2);
-   		bot_action(bot,target,"feeling lovely");*/
-	}
-	if(strstr(msg,"fuck")){
-		bot_raw(bot,"PRIVMSG %s :%s: don't say bad words!\r\n", target, user);
-	/*	sleep(2);
-    		bot_action(bot,target,"is angry!"); */
-	}
+	else if(strstr(msg,"lol"))
+		bot_raw(bot,"PRIVMSG %s :%s: i'm very happy ( ͡° ͜ʖ ͡°) \r\n", target, user);
+	else if(strstr(msg,"\\o/"))
+		bot_raw(bot,"PRIVMSG %s :%s: \\o/ \r\n", target, user);
+	 
+   
+    struct hostent* hp;
+    struct in_addr **addr_list;
 	
 	char *h1=malloc(strlen(bot->nick)+14);
 	strcpy(h1,bot->nick);
@@ -192,6 +196,10 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
 			bot_raw(bot, "PRIVMSG %s :%s\r\n", target, msg);
 		}
 	}
+	if(strstr(msg,"http://")) {
+		msg = strtok(msg, "\n\r");
+		
+		
 	if(strstr(msg,"http://")) {
 		msg = strtok(msg, "\n\r");
 		if(is_html_link(msg)){
@@ -213,6 +221,11 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
 	int i=0;
 	char **ap, *argv[10];
 	
+	
+
+	
+
+		
 	// Clean the string
 	cmd = strtok(msg, "!");	
 	cmd = strtok(cmd, "\n\r");
@@ -230,310 +243,419 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
 	}
 	// the command is in the first argument
 	if(argv[0] == NULL)
-		return 1;
+		return 1;	
 	
-	// Fuck That
-	if(strcasecmp(argv[0], "ping") == 0){
-		bot_raw(bot,"PRIVMSG %s :pong\r\n", target);
-	}
-	else if(strcasecmp(argv[0], "help") == 0){
-		bot_help(bot,argv[1], target);
-	}
-	else if(strcasecmp(argv[0], "portale") == 0){
-		bot_portal(bot,argv[1], target);
-	}
-	else if(strcasecmp(argv[0], "count") == 0){
-		bot_raw(bot,"PRIVMSG %s :%d\r\n", target, i);
-	}
-	else if(strcasecmp(argv[0], "quit") == 0){
-		if(is_op(bot,user)!=-1){
-			bot_quit(bot);
-		} 
-		else if (argv[1] != NULL){
-			bot_raw(bot,"PRIVMSG %s :Pff, %s go away!\r\n", target, argv[1]);
-		}else{ 
-			bot_raw(bot,"PRIVMSG %s :Pff, %s go away!\r\n", target, user);
-		}
-	}
-	else if(strcasecmp(argv[0], "unaway") == 0){
-		if(is_op(bot,user)!=-1){
-			bot_raw(bot,"AWAY :\0\r\n", target, user);
-			//bot_raw(bot,"AWAY\r\n");
-		} else {
-			bot_raw(bot,"PRIVMSG %s :Pff, %s go away!\r\n", target, user);
-		}
-	}
-	else if(strcasecmp(argv[0], "away") == 0){
-		if(is_op(bot,user)!=-1){
-			bot_away(bot);
-		} else if(argv[1] != NULL){
-			bot_raw(bot,"PRIVMSG %s :Pff, %s go away!\r\n", target, argv[1]);
-		}else{			
-			bot_raw(bot,"PRIVMSG %s :Pff, %s go away!\r\n", target, user);
-		}
-	}
-	else if((strcasecmp(argv[0], "google") == 0) && argv[1] != NULL){
-		if(argv[2] != NULL){
-			bot_raw(bot,"PRIVMSG %s :%s: http://lmgtfy.com/?q=%s\r\n", target, argv[2], argv[1]);
-		} else {
-			bot_raw(bot,"PRIVMSG %s :%s: http://lmgtfy.com/?q=%s\r\n", target, user, argv[1]);
-		}	
-	}
-	else if((strcasecmp(argv[0], "ddg") == 0) && argv[1] != NULL){
-		if(argv[2] != NULL){
-			bot_raw(bot,"PRIVMSG %s :%s: https://lmddgtfy.net/?q=%s\r\n", target, argv[2], argv[1]);
-		} else {
-			bot_raw(bot,"PRIVMSG %s :%s: https://lmddgtfy.net/?q=%s\r\n", target, user, argv[1]);	
-		}
-	}
-	else if(strcasecmp(argv[0], "reddit") == 0) {
-		if(argv[1] != NULL) 
-			bot_raw(bot, "PRIVMSG %s :http://www.reddit.com/search?q=%s\r\n", target, argv[1]);
-	else
-		bot_raw(bot, "PRIVMSG %s :%s: http://www.reddit.com/r/random\r\n", target, user);
-	}
-  else if(strcasecmp(argv[0], "sqrt") == 0) {
-  	if(argv[1]!=NULL){
-		double i = atof(argv[1]);
-		bot_raw(bot,"PRIVMSG %s :%s: %g\r\n", target, user, sqrt(i));
-  	} else {
-		bot_raw(bot,"PRIVMSG %s :%s: you need to provide at least one argument!\r\n",target,user);
-		}
-	}
-  else if(strcasecmp(argv[0], "sum") == 0) { 
-    if((argv[1] != NULL)&&(argv[2] != NULL)) {
-      double i = atof(argv[1]);
-      double j = atof(argv[2]);
-      bot_raw(bot, "PRIVMSG %s :%s: %g\r\n", target, user, i+j);
-    } else {
-      bot_raw(bot, "PRIVMSG %s :%s: you need to provide at least two arguments!\r\n", target, user);
-    } 
-  }
+	srand(time(NULL));
+	
+ char stringa[N][12]={"<3","love","fuck","lastseen","ping","help","portale",
+     "count","quit","unaway","away","google","ddg","reddit","sqrt","sum",
+     "sub","div","mul","pow","source","eq","archwiki","whoami","attack",
+     "lookup","life","rms","random","future","sexy","dio","blasfem","information","grazie",
+     "C","contrib","wtf","hate","segfault","yt","userlist","lol"};
+      
+ int scelta,control_cmd=0;
+ int contaarg=0;
+ char *stringa_cat ;  //si potrebbe usare anche alloc
 
-  /* Aggiunta da CavalloBlu  */
-  else if(strcasecmp(argv[0], "sub") == 0) { 
-    if((argv[1] != NULL)&&(argv[2] != NULL)) {
-      double i = atof(argv[1]);
-      double j = atof(argv[2]);
-      bot_raw(bot, "PRIVMSG %s :%s: %g\r\n", target, user, i-j);
-    } else {
-      bot_raw(bot, "PRIVMSG %s :%s: you need to provide at least two arguments!\r\n", target, user);
-    } 
-  }
-  else if(strcasecmp(argv[0],"div")==0) { 
-    if((argv[1] != NULL)&&(argv[2] != NULL)){
-      double i=atof(argv[1]);
-      double j=atof(argv[2]);
-      bot_raw(bot, "PRIVMSG %s :%s: %g\r\n", target, user, i/j);
-     } else {
-       bot_raw(bot, "PRIVMSG %s :%s: you need to provide at least two arguments!\r\n", target, user);
-     }
-}
-
-  else if(strcasecmp(argv[0],"mul")==0) { 
-    if((argv[1] != NULL)&&(argv[2] != NULL)){
-      double i=atof(argv[1]);
-      double j=atof(argv[2]);
-      bot_raw(bot, "PRIVMSG %s :%s: %g\r\n", target, user, i*j);
-     } else {
-       bot_raw(bot, "PRIVMSG %s :%s: you need to provide at least two arguments!\r\n", target, user);
-      }
-}
-
-  else if(strcasecmp(argv[0],"pow")==0) { 
-    if((argv[1] != NULL)&&(argv[2] != NULL)){
-     double i=atof(argv[1]);
-     double j=atof(argv[2]);
-     bot_raw(bot, "PRIVMSG %s :%s: %g\r\n", target, user, pow(i,j));
-    } else {
-      bot_raw(bot, "PRIVMSG %s :%s: you need to provide at least two arguments!\r\n", target, user);
-    }
-} 
-  else if(strcasecmp(argv[0],"source")==0){
-  	if(argv[1]!=NULL){
-  	bot_raw(bot, "PRIVMSG %s :%s: https://github.com/umby213/bot\r\n", target, argv[1]);
-  }
-  	else{
-  		bot_raw(bot, "PRIVMSG %s :%s: https://github.com/umby213/bot\r\n", target, user);
-  	}
-  }
-  
-  else if(strcasecmp(argv[0],"eq")==0){
-    if(argv[1]!=NULL&&argv[2]!=NULL&&argv[3]!=NULL){
-    float a,b,c;
-    float x1,x2,delta;
-    a=atof(argv[1]);
-    b=atof(argv[2]);
-    c=atof(argv[3]);
-    delta=b*b - 4*a*c;
-    if(a==0)
-    {
-        if(b!=0)
-        {
-            x1=-c/b;
-            x2=0;
-            bot_raw(bot, "PRIVMSG %s :%s: x1: %.2f x2: %.2f\r\n", target, user,x1,x2);
-        }
-        else
-        {
-            bot_raw(bot, "PRIVMSG %s :%s: L'equazione non contiene variabili.\r\n", target, user);
-        }
-    }
-    else
-    {
-        if(delta>=0)
-        {
-            x1=(-b+sqrt(delta))/(2*a);
-            x2=(-b-sqrt(delta))/(2*a);
-            bot_raw(bot, "PRIVMSG %s :%s: x1: %.2f x2: %.2f\r\n", target, user,x1,x2);
-        }
-        else
-        {
-            bot_raw(bot, "PRIVMSG %s :%s: L'equazione non ammette soluzioni reali.\r\n", target, user);
-        }
-
-    }
-    }
-  	else{
-  		bot_raw(bot, "PRIVMSG %s :%s: Parametri insufficienti.\r\n", target, user);
-  	}
-  }
-  
-  
-/* Fine CavalloBlu  */
-
-  else if((strcasecmp(argv[0], "archwiki") == 0) && argv[1] != NULL) {
-		if(argv[2] != NULL) {
-			bot_raw(bot,"PRIVMSG %s :%s: https://wiki.archlinux.org/index.php?title=Special:Search&search=%s\r\n", target, argv[2], argv[1]);
-		} else { 
-			bot_raw(bot,"PRIVMSG %s :%s: https://wiki.archlinux.org/index.php?title=Special:Search&search=%s\r\n", target, user, argv[1]);
-		}
+	for(scelta=0;scelta<N;scelta++){
+		
+		if(strcmp(stringa[scelta],argv[0]) == 0)
+			break;
+	    
+			
 	}
-	else if(strcasecmp(argv[0], "whoami") == 0) {
-		bot_raw(bot,"PRIVMSG %s :I'm a bot, developed using Coffee. You are %s, I think you know...\r\n", target, user);
-	}
-	else if((strcasecmp(argv[0], "attack") == 0) && argv[1] != NULL) {
-		srand(time(NULL));
-		int critical;
-		critical = (rand()%10)/8;
-		if(critical){
-			bot_raw(bot,"PRIVMSG %s :\001ACTION attacks %s! %d damage (it's super effective).\001\r\n", target, argv[1], rand()%20 + 21);
-		} else {
-			bot_raw(bot,"PRIVMSG %s :\001ACTION attacks %s! %d damage.\001\r\n", target, argv[1], rand()%20 + 1);
-		}
-	}
-	else if((strcasecmp(argv[0], "lookup") == 0) && argv[1] != NULL) {
-		struct hostent* hp;
-		struct in_addr **addr_list;
-		if((hp = gethostbyname(argv[1])) == NULL){
-			bot_raw(bot,"PRIVMSG %s :%s: The host %s is unreachable.\r\n", target, user, argv[1]);
-		} else {
-			addr_list = (struct in_addr **)hp->h_addr_list;
-			bot_raw(bot,"PRIVMSG %s :%s: IP: %s\r\n", target, user, inet_ntoa(*addr_list[0]));
-		}
-  }
-  else if(strcasecmp(argv[0], "life") == 0) {
-    bot_raw(bot, "PRIVMSG %s :%s: 42\r\n", target, user);
-  }
-  else if(strcasecmp(argv[0], "rms") == 0) {
-    bot_raw(bot, "PRIVMSG %s :Stallman approves.\r\n", target);
-  }
-  else if(strcasecmp(argv[0], "information") == 0) {
-    bot_raw(bot, "PRIVMSG %s :Information is power. But like all the power there are those who want to keep it for themselves -- ~Aaron Swartz\r\n", target);
-  }
-  else if(strcasecmp(argv[0], "random") == 0) {
-    srand(time(NULL));
-    bot_raw(bot, "PRIVMSG %s :%s: here you are a $RANDOM number -> %d\r\n", target, user, rand());
-  }
-  else if(strcasecmp(argv[0], "future") == 0 ) {
-    bot_raw(bot, "PRIVMSG %s :Innovation is not what innovators do, but what customers adopt...this is freedomfight!\r\n", target);
-  } 
-  else if(strcasecmp(argv[0], "sexy") == 0 ) {
-    bot_raw(bot, "PRIVMSG %s :https://rms.sexy/\r\n", target);
-  } 
-  else if(strcasecmp(argv[0], "dio") == 0 ) {
-    bot_raw(bot, "PRIVMSG %s :ah quel famoso porco di tre lettere...sì, ora ricordo...\r\n", target);
-  }  
-  else if(strcasecmp(argv[0], "blasfem") == 0 ) {
-    bot_raw(bot, "PRIVMSG %s :dioladro.\r\n", target);
-  } 
-  else if(strcasecmp(argv[0], "grazie") == 0 ) {
-    bot_raw(bot, "PRIVMSG %s :prego %s!\r\n", target, user);
-  } 
-  else if(strcasecmp(argv[0], "C") == 0 ) {
-    bot_raw(bot, "PRIVMSG %s :sono stato scritto in C per far contento RMS.\r\n", target);
-  } 
-  else if(strcasecmp(argv[0], "contrib") == 0 ) {
-	  if (argv[1] != NULL){
-	    bot_raw(bot, "PRIVMSG %s :%s: https://raw.githubusercontent.com/umby213/bot/master/contributors.txt\r\n", target, argv[1]);
-	  }else{	
-	    bot_raw(bot, "PRIVMSG %s :https://raw.githubusercontent.com/umby213/bot/master/contributors.txt\r\n", target);
-	  }
-  } 
-  else if(strcasecmp(argv[0], "privacy") == 0 ) {
-    if(argv[1] != NULL) {
-      bot_raw(bot, "PRIVMSG %s :%s: https://eff.org | https://prism-break.org | https://torproject.org | http://stallman.org\r\n", target, argv[1]);
-    } else {
-      bot_raw(bot, "PRIVMSG %s :%s: https://eff.org | https://prism-break.org | https://torproject.org | http://stallman.org\r\n", target, user);
-    }
-  } 
-	else if(strcasecmp(argv[0], "wat") == 0 ) {
-		if(argv[1] != NULL) {
-			bot_raw(bot, "PRIVMSG %s :%s: http://goo.gl/T9SSRy\r\n", target, argv[1]);
-		} else {
-			bot_raw(bot, "PRIVMSG %s :%s: http://goo.gl/T9SSRy\r\n", target, user);
-		}
-	}
+	    
+	  
+    
+    /*Tips per aggiungere comandi: 
+     * 1) Modificare la costante N in cima 
+     * 2) Aggiungere il comando nella matrice "stringa" 
+     * 3) Aggiungere case Switch
+     * 
+     * Ps: E' stato aggiunto un controllo sui  comandi <3 , love , lol perchè vengono eseguiti senza "!"
+     * (Vedi sopra , riga 173) , per ogni comando senza "!" va aggiunta un eccezione nella matrice "stringa" 
+     * Dunque inserire solo comandi che iniziano con "!" es "!future".
+     */
+    
+    
+    switch(scelta){
+		
+		case 0: //<3
+		
+			control_cmd=1; 
+			
+			break; 
+			
+	    case 1: //love
+	    
+			control_cmd=1;
+			
+			break; 
+			
+	    case 2: //fuck
+	    
+			bot_raw(bot,"PRIVMSG %s :%s: don't say bad words!\r\n", target, user);break; 
+	    
+	    case 3: //lastseen
+	    
+			if(argv[1] != NULL) 
+				bot_raw(bot, "PRIVMSG NickServ :info %s\r\n",argv[1]); break;
+			
+	    case 4: //ping
+	    
+			bot_raw(bot,"PRIVMSG %s :pong\r\n", target); break;
+	    
+	    case 5: //help
+	    
+			bot_help(bot,argv[1], target); break;
+			
+	    case 6: //portale
+	    
+			bot_portal(bot,argv[1], target); break;
+			
+	    case 7: //count
+	    
+			bot_raw(bot,"PRIVMSG %s :%d\r\n", target, i); break; 
+			
+	    case 8: //Quit
+	    
+			if(is_op(bot,user)!=-1){
+					bot_quit(bot);
+				}else if (argv[1] != NULL){
+					bot_raw(bot,"PRIVMSG %s :Pff, %s go away!\r\n", target, argv[1]);   
+			    }else{ 
+					bot_raw(bot,"PRIVMSG %s :Pff, %s go away!\r\n", target, user);
+				} break; 
+		    
+		case 9: //unaway
+		
+			if(is_op(bot,user)!=-1){
+				bot_raw(bot,"AWAY :\0\r\n", target, user);
+				//bot_raw(bot,"AWAY\r\n");
+			}else{
+				bot_raw(bot,"PRIVMSG %s :Pff, %s go away!\r\n", target, user);  
+			}break;	
+		
+		case 10: //away
+		
+			if(is_op(bot,user)!=-1){
+				bot_away(bot);
+			}else if(argv[1] != NULL){
+				bot_raw(bot,"PRIVMSG %s :Pff, %s go away!\r\n", target, argv[1]);  
+			}else{			
+				bot_raw(bot,"PRIVMSG %s :Pff, %s go away!\r\n", target, user);
+			}break;	
+			
+		case 11: //google
+		
+			if(argv[1] != NULL){
+				if(argv[2] != NULL)
+					bot_raw(bot,"PRIVMSG %s :%s: http://lmgtfy.com/?q=%s\r\n", target, argv[2], argv[1]);  
+				else 
+					bot_raw(bot,"PRIVMSG %s :%s: http://lmgtfy.com/?q=%s\r\n", target, user, argv[1]);
+				}break;		
+			
+			
+		case 12: //ddg
+		
+			if(argv[2] != NULL)
+				bot_raw(bot,"PRIVMSG %s :%s: https://lmddgtfy.net/?q=%s\r\n", target, argv[2], argv[1]); 
+			else 
+				bot_raw(bot,"PRIVMSG %s :%s: https://lmddgtfy.net/?q=%s\r\n", target, user, argv[1]);break;		
+			
+		
+		case 13: //reddit
+		
+			if(argv[1] != NULL) 
+				bot_raw(bot, "PRIVMSG %s :http://www.reddit.com/search?q=%s\r\n", target, argv[1]);
+			else
+				bot_raw(bot, "PRIVMSG %s :%s: http://www.reddit.com/r/random\r\n", target, user);break;	
+			
+	    case 14: //sqrt
+			
+			if(argv[1]!=NULL){
+				double i = atof(argv[1]);
+				bot_raw(bot,"PRIVMSG %s :%s: %g\r\n", target, user, sqrt(i));  
+			} else 
+				bot_raw(bot,"PRIVMSG %s :%s: you need to provide at least one argument!\r\n",target,user);break;	
+			
+			
+		case 15: //sum
+		
+			if((argv[1] != NULL)&&(argv[2] != NULL)) {
+				double i = atof(argv[1]);
+				double j = atof(argv[2]);
+				bot_raw(bot, "PRIVMSG %s :%s: %g\r\n", target, user, i+j); 
+			} else 
+				bot_raw(bot, "PRIVMSG %s :%s: you need to provide at least two arguments!\r\n", target, user);break;	
+			
+		/* Aggiunta da CavalloBlu  */ 	
+		
+		case 16: //sub
+		
+			if((argv[1] != NULL)&&(argv[2] != NULL)) {
+				double i = atof(argv[1]);
+				double j = atof(argv[2]);
+				bot_raw(bot, "PRIVMSG %s :%s: %g\r\n", target, user, i-j);  
+			} else {
+				bot_raw(bot, "PRIVMSG %s :%s: you need to provide at least two arguments!\r\n", target, user);
+			}break;	
+		
+		case 17: //div
+				
+			if((argv[1] != NULL)&&(argv[2] != NULL)){
+				double i=atof(argv[1]);
+				double j=atof(argv[2]);
+				bot_raw(bot, "PRIVMSG %s :%s: %g\r\n", target, user, i/j);  
+			} else {
+				bot_raw(bot, "PRIVMSG %s :%s: you need to provide at least two arguments!\r\n", target, user);
+			}break;			
+			
+		case 18: //mul
+		
+			if((argv[1] != NULL)&&(argv[2] != NULL)){
+				double i=atof(argv[1]);
+				double j=atof(argv[2]);
+				bot_raw(bot, "PRIVMSG %s :%s: %g\r\n", target, user, i*j); 
+			} else {
+				bot_raw(bot, "PRIVMSG %s :%s: you need to provide at least two arguments!\r\n", target, user);
+			}break;	
+			
+		case 19: //pow
+		
+			if((argv[1] != NULL)&&(argv[2] != NULL)){
+				double i=atof(argv[1]);
+				double j=atof(argv[2]);
+				bot_raw(bot, "PRIVMSG %s :%s: %g\r\n", target, user, pow(i,j));  
+			} else {
+				bot_raw(bot, "PRIVMSG %s :%s: you need to provide at least two arguments!\r\n", target, user);
+			}break;	
+			
+		case 20: //source
+			
+			if(argv[1]!=NULL)
+				bot_raw(bot, "PRIVMSG %s :%s: https://github.com/umby213/bot\r\n", target, argv[1]); 
+			else
+				bot_raw(bot, "PRIVMSG %s :%s: https://github.com/umby213/bot\r\n", target, user);break;	
+				
+		case 21: //eq
+		
+			if(argv[1]!=NULL&&argv[2]!=NULL&&argv[3]!=NULL){
+				
+				float a,b,c;
+				float x1,x2,delta;
+				
+				a=atof(argv[1]);
+				b=atof(argv[2]);
+				c=atof(argv[3]);
+				delta=b*b - 4*a*c;
+				
+				if(a==0){
+					
+					if(b!=0){
+						
+						x1=-c/b;
+						x2=0;
+						bot_raw(bot, "PRIVMSG %s :%s: x1: %.2f x2: %.2f\r\n", target, user,x1,x2);
+					}
+					else{
+						bot_raw(bot, "PRIVMSG %s :%s: L'equazione non contiene variabili.\r\n", target, user);
+					}
+				}
+				else{
+					
+					if(delta>=0){
+						
+						x1=(-b+sqrt(delta))/(2*a);
+						x2=(-b-sqrt(delta))/(2*a);
+						bot_raw(bot, "PRIVMSG %s :%s: x1: %.2f x2: %.2f\r\n", target, user,x1,x2);
+					}
+					else{
+						bot_raw(bot, "PRIVMSG %s :%s: L'equazione non ammette soluzioni reali.\r\n", target, user);
+					}
 
-	else if(strcasecmp(argv[0], "wtf") == 0 ) {
-		if(argv[1] != NULL) {
-			bot_raw(bot, "PRIVMSG %s :%s: http://goo.gl/sAkn7z\r\n", target, argv[1]);
-		} else {
-			bot_raw(bot, "PRIVMSG %s :%s: http://goo.gl/sAkn7z\r\n", target, user);
-		}
-	} 
+				}
+			} /* fine if di esistenza argc */
+				
+				else{
+					bot_raw(bot, "PRIVMSG %s :%s: Parametri insufficienti.\r\n", target, user);
+				}
+				break;	
+		/* Fine CavalloBlu  */
 
-	else if(strcasecmp(argv[0], "hate") == 0 ) {
-		if(argv[1] != NULL) {
-			bot_raw(bot, "PRIVMSG %s :%s: http://goo.gl/fHVO8s\r\n", target, argv[1]);
-		} else {
-			bot_raw(bot, "PRIVMSG %s :%s: http://goo.gl/fHVO8s\r\n", target, user);
-		}
-	} 
-
-  else if(strcasecmp(argv[0], "segfault") == 0) {
-    bot_raw(bot, "PRIVMSG %s :TrinciaPollo never segfault...and never lie.\r\n", target);
-  }
-  else if(strcasecmp(argv[0], "yt") == 0) {
-		if(argv[1] != NULL) {
-			char *yt;
-			strtok(argv[1], "?");	
-			yt = strtok(NULL, "?");
+		case 22:  //archwiki
+		
+		
+		
+		stringa_cat=argv[1];
+		contaarg=1;
+		
+		
+	
+		
+		
+		
+			if(argv[1] != NULL) {
+				
+			while(argv[contaarg]==NULL)
+				{
+					stringa_cat=strcat(stringa_cat,"+"); 
+					stringa_cat=strcat(stringa_cat,argv[contaarg]); 
+					contaarg++;
+					
+				}
+				bot_raw(bot,"PRIVMSG %s ::%s https://wiki.archlinux.org/index.php?title=Special:Search&search=%s\r\n", target, user, stringa_cat);
+			}
+			else 
+				bot_raw(bot,"PRIVMSG %s :%s: Errore: Inserisci almeno un argomento da cercare nella wiki", target, user);break;	
+		
+		case 23: //whoami
+		
+			bot_raw(bot,"PRIVMSG %s :I'm a bot, developed using Coffee. You are %s, I think you know...\r\n", target, user);break;	
+			
+		case 24: //attack
+		
+			srand(time(NULL));
+			int critical;
+			critical = (rand()%10)/8;
+			
+			if(critical)
+			{
+				bot_raw(bot,"PRIVMSG %s :\001ACTION attacks %s! %d damage (it's super effective).\001\r\n", target, argv[1], rand()%20 + 21);
+			}
+			else 
+			{
+				bot_raw(bot,"PRIVMSG %s :\001ACTION attacks %s! %d damage.\001\r\n", target, argv[1], rand()%20 + 1);
+			}
+			break;	
+				
+		case 25: //lookup
+		
+			//era qui struct
+			
+			
+			
+			if((hp = gethostbyname(argv[1])) == NULL)
+			{
+				bot_raw(bot,"PRIVMSG %s :%s: The host %s is unreachable.\r\n", target, user, argv[1]);
+			}
+			else {
+				
+				addr_list = (struct in_addr **)hp->h_addr_list;
+				bot_raw(bot,"PRIVMSG %s :%s: IP: %s\r\n", target, user, inet_ntoa(*addr_list[0]));
+			}break;	
+			
+		case 26: //life
+		
+			bot_raw(bot, "PRIVMSG %s :%s: 42\r\n", target, user);break;	  	
+				
+		case 27: //rms
+		 
+			bot_raw(bot, "PRIVMSG %s :Stallman approves.\r\n", target);break;	 	
+			 
+		case 28: //random
+		 
+			
+			bot_raw(bot, "PRIVMSG %s :%s: here you are a $RANDOM number -> %d\r\n", target, user, rand());break;	 
+				 
+		case 29: //future
+		
+			bot_raw(bot, "PRIVMSG %s :Innovation is not what innovators do, but what customers adopt...this is freedomfight!\r\n", target);break;	 
+		
+		case 30: //sexy
+		
+			bot_raw(bot, "PRIVMSG %s :https://rms.sexy/\r\n", target); break;	
+		
+		case 31: //dio
+		
+			bot_raw(bot, "PRIVMSG %s :ah quel famoso porco di tre lettere...sì, ora ricordo...\r\n", target);break;	 
+			
+		case 32: //blasfem
+		
+			bot_raw(bot, "PRIVMSG %s :dioladro.\r\n", target);break;		
+			
+		case 33: //information
+		
+			bot_raw(bot, "PRIVMSG %s :Information is power. But like all the power there are those who want to keep it for themselves -- ~Aaron Swartz\r\n", target); break;	
+		
+		case 34: //grazie
+		
+			bot_raw(bot, "PRIVMSG %s :prego %s!\r\n", target, user);break;	 
+			
+		case 35: //C
+		
+			bot_raw(bot, "PRIVMSG %s :sono stato scritto in C per far contento RMS.\r\n", target);break;	 
+		
+		case 36: //contrib
+		
+			if (argv[1] != NULL)
+				bot_raw(bot, "PRIVMSG %s :%s: https://raw.githubusercontent.com/umby213/bot/master/contributors.txt\r\n", target, argv[1]);
+			else
+				bot_raw(bot, "PRIVMSG %s :https://raw.githubusercontent.com/umby213/bot/master/contributors.txt\r\n", target);break;	
+				
+		case 37: //wtf
+		
+			if(argv[1] != NULL) 
+				bot_raw(bot, "PRIVMSG %s :%s: http://goo.gl/sAkn7z\r\n", target, argv[1]);
+			else 
+				bot_raw(bot, "PRIVMSG %s :%s: http://goo.gl/sAkn7z\r\n", target, user);break;	
+			
+		case 38: //hate
+		
+			if(argv[1] != NULL) 
+				bot_raw(bot, "PRIVMSG %s :%s: http://goo.gl/fHVO8s\r\n", target, argv[1]);
+			else 
+				bot_raw(bot, "PRIVMSG %s :%s: http://goo.gl/fHVO8s\r\n", target, user);break;	
+				
+		case 39: //segfault
+			
+			bot_raw(bot, "PRIVMSG %s :TrinciaPollo never segfault...and never lie.\r\n", target);break;	
+			
+		case 40: //yt
+		
+			if(argv[1] != NULL) {
+				
+				char *yt;
+				strtok(argv[1], "?");	
+				yt = strtok(NULL, "?");
+				
 			if(yt[0]=='v' && yt[1]=='='){
 				yt = strtok(&yt[2], "&");
 				bot_raw(bot, "PRIVMSG %s :%s Click Here: http://www.flvto.com/it/download/yt_%s/\r\n", target, user, yt);
 			}
-    } else {
-			bot_raw(bot, "PRIVMSG %s :%s Dowload and extract .mp3 from a video: `youtube-dl --extract-audio --audio-format mp3 link_here`\r\n", target, user);
-		}
-  }
-  else if(strcasecmp(argv[0], "lastseen") == 0) {
-		if(argv[1] != NULL) {
-			bot_raw(bot, "PRIVMSG NickServ :info %s\r\n",argv[1]);
-		}
-  }
-  else if(strcasecmp(argv[0], "userlist") == 0) {
-	  if (strcasecmp(target,bot->chan) != 0){
-	  	bot_raw(bot, "PRIVMSG %s :!userlist non può essere usato in query.\r\n", target);
-	  }else{
-		bot_raw(bot, "NAMES %s\r\n", target);
-	  }
-  }
-  //if unknown command
-  else{
-  	bot_raw(bot, "PRIVMSG %s :%s: Comando non valido, dai un !help.\r\n", target, user);
-  }
+			
+			} else 
+				bot_raw(bot, "PRIVMSG %s :%s Dowload and extract .mp3 from a video: `youtube-dl --extract-audio --audio-format mp3 link_here`\r\n", target, user);break;	
+		
+		case 41: //userlist
+			
+			if (strcasecmp(target,bot->chan) != 0)
+				bot_raw(bot, "PRIVMSG %s :!userlist non può essere usato in query.\r\n", target);
+			else
+				bot_raw(bot, "NAMES %s\r\n", target); break;	
+				
+		case 42: //lol
+		
+			control_cmd = 1;
+		
+		
+		default: //in ogni altro caso
+		
+		if (control_cmd != 1)
+			bot_raw(bot, "PRIVMSG %s :%s: Comando non valido, dai un !help.\r\n", target, user); 
+		break;	
+		
+				
+
+			
+	}		
+
+	
+	
 	return 0;
+	
+	
+	
 }
 
 int bot_parse_service(struct IRC *bot, char *server, char *command, char *me, char *channel, char *msg){
