@@ -261,8 +261,7 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
 		
 		if(strcmp(stringa[scelta],argv[0]) == 0)
 			break;
-	    
-			
+	 
 	}
 	    
 	  
