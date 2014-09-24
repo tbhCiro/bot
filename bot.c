@@ -280,44 +280,45 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
     
     switch(scelta){
 		
-		case 0: //<3
+		
+	    case 0: //<3
 		
 			control_cmd=1; 
 			
 			break; 
 			
-	    case 1: //love
+	    	case 1: //love
 	    
 			control_cmd=1;
 			
 			break; 
 			
-	    case 2: //fuck
+	 	case 2: //fuck
 	    
 			bot_raw(bot,"PRIVMSG %s :%s: don't say bad words!\r\n", target, user);break; 
 	    
-	    case 3: //lastseen
+	    	case 3: //lastseen
 	    
 			if(argv[1] != NULL) 
 				bot_raw(bot, "PRIVMSG NickServ :info %s\r\n",argv[1]); break;
 			
-	    case 4: //ping
+	    	case 4: //ping
 	    
 			bot_raw(bot,"PRIVMSG %s :pong\r\n", target); break;
 	    
-	    case 5: //help
+		case 5: //help
 	    
 			bot_help(bot,argv[1], target); break;
 			
-	    case 6: //portale
+	        case 6: //portale
 	    
 			bot_portal(bot,argv[1], target); break;
 			
-	    case 7: //count
+	        case 7: //count
 	    
 			bot_raw(bot,"PRIVMSG %s :%d\r\n", target, i); break; 
 			
-	    case 8: //Quit
+	        case 8: //Quit
 	    
 			if(is_op(bot,user)!=-1){
 					bot_quit(bot);
@@ -371,7 +372,7 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
 			else
 				bot_raw(bot, "PRIVMSG %s :%s: http://www.reddit.com/r/random\r\n", target, user);break;	
 			
-	    case 14: //sqrt
+		case 14: //sqrt
 			
 			if(argv[1]!=NULL){
 				double i = atof(argv[1]);
