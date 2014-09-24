@@ -278,7 +278,7 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
     switch(scelta){
 		
 		
-	    case 0: //<3
+		case 0: //<3
 		
 			control_cmd=1; 
 			
@@ -483,27 +483,10 @@ int bot_parse_action(struct IRC *bot, char *user, char *command, char *where, ch
 
 		case 22:  //archwiki
 		
-		
-		
-		stringa_cat=argv[1];
-		contaarg=1;
-		
-		
-	
-		
-		
-		
-			if(argv[1] != NULL) {
-				
-			while(argv[contaarg]==NULL)
-				{
-					stringa_cat=strcat(stringa_cat,"+"); 
-					stringa_cat=strcat(stringa_cat,argv[contaarg]); 
-					contaarg++;
+			if(argv[1] != NULL) 
 					
-				}
-				bot_raw(bot,"PRIVMSG %s ::%s https://wiki.archlinux.org/index.php?title=Special:Search&search=%s\r\n", target, user, stringa_cat);
-			}
+				bot_raw(bot,"PRIVMSG %s ::%s https://wiki.archlinux.org/index.php?title=Special:Search&search=%s\r\n", target, user, argv[1]);
+		
 			else 
 				bot_raw(bot,"PRIVMSG %s :%s: Errore: Inserisci almeno un argomento da cercare nella wiki", target, user);break;	
 		
